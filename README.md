@@ -1,0 +1,4 @@
+# Passkey-Generator
+Passkey-Generator is a developer tool built with [@simplewebauthn](https://simplewebauthn.dev/) that allows you to interact with the browser’s WebAuthn API to create and test Passkeys.
+
+With a simple UI, you can generate Passkeys by clicking a button, and fully customize both the creation options [PublicKeyCredentialCreationOptions](https://developer.mozilla.org/en-US/docs/Web/API/PublicKeyCredentialCreationOptions) and the request options [PublicKeyCredentialRequestOptions](https://developer.mozilla.org/en-US/docs/Web/API/PublicKeyCredentialRequestOptions) for fetching Passkeys.
