@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar";
 import Topbar from "./Topbar";
 import { ReactNode } from "react";
 
-export default function AppShell({ children, active }: { children: ReactNode; active: "create" | "get" | "presets" | "history" | "settings" }) {
+export default function AppShell({ children, active }: { children: ReactNode; active: "create" | "get" }) {
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-[260px_1fr]">
       <aside className="hidden lg:block border-r bg-gradient-to-b from-brand-50/40 to-transparent dark:from-slate-800/30">
