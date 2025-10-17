@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { RunResult } from "@/lib/types";
-import { useHistoryStore } from "@/hooks/useHistory";
 import { base64URLStringToBuffer, bufferToBase64URLString, startAuthentication, type PublicKeyCredentialRequestOptionsJSON } from "@simplewebauthn/browser";
 import { convertAAGUIDToString, convertCOSEtoPKCS, decodeClientDataJSON, parseAuthenticatorData } from "@simplewebauthn/server/helpers";
 import { toHex } from "viem";
@@ -41,6 +40,7 @@ export function usePasskeyGet() {
       
       const decodedClientData = decodeClientDataJSON(auth.response.clientDataJSON);
       
+      
       const {r,s} = p256.Signature.fromBytes(new Uint8Array(base64URLStringToBuffer(auth.response.signature)),"der")
       
       const enriched = {
@@ -54,14 +54,11 @@ export function usePasskeyGet() {
       };
 
       setResult(enriched);
-
-      // try { useHistoryStore.getState().push(res); } catch {}
       setError(null);
     } catch (e: any) {
       const errRes: RunResult<PublicKeyCredentialRequestOptionsJSON, any> = { ok: false, request: effectiveRequest, error: { name: e?.name || "Error", message: e?.message || "Unknown" }, at: new Date().toISOString(), method: "get" };
       setResult(errRes);
       setError({ name: errRes.error!.name, message: errRes.error!.message });
-      // try { useHistoryStore.getState().push(errRes); } catch {}
     } finally {
       setRunning(false);
     }

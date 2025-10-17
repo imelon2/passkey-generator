@@ -1,7 +1,7 @@
 import { ButtonHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "default" | "outline" | "ghost";
+type Variant = "default" | "outline" | "ghost" | "soft";
 type Size = "sm" | "md" | "lg";
 
 export function Button({ className, variant = "default", size = "md", ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; size?: Size }) {
@@ -10,6 +10,7 @@ export function Button({ className, variant = "default", size = "md", ...props }
     default: "bg-brand-500 text-white border-brand-500 hover:bg-brand-600",
     outline: "bg-transparent text-foreground border hover:bg-muted",
     ghost: "bg-transparent border-transparent hover:bg-muted",
+    soft: "bg-muted text-foreground border-transparent hover:bg-muted/80",
   };
   const sizes: Record<Size, string> = {
     sm: "h-8 px-3",

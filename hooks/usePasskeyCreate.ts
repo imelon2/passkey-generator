@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { RunResult } from "@/lib/types";
-import { useHistoryStore } from "@/hooks/useHistory";
 import { convertCOSEALG, hex0xToUint8Array, toSerializablePublicKeyCredential } from "@/lib/utils";
 import { base64URLStringToBuffer, bufferToBase64URLString, startRegistration } from "@simplewebauthn/browser";
 import { type PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/browser";
@@ -10,8 +9,8 @@ import { toHex } from "viem";
 
 export function usePasskeyCreate() {
   const [request, setRequest] = useState<PublicKeyCredentialCreationOptionsJSON>(() => ({
-    rp: { name: "choi" },
-    user: { name: "choi", displayName: "choi" },
+    rp: { name: "passkey-generator" },
+    user: { name: "choi", displayName: "choi-display" },
     pubKeyCredParams: [{ type: "public-key", alg: -7 }],
     attestation:"none"
   } as PublicKeyCredentialCreationOptionsJSON));
@@ -31,13 +30,14 @@ export function usePasskeyCreate() {
     const req = (override || request);
     try {
       const cred = await startRegistration({ optionsJSON: req })
+      
       const decodedAttestationObject = decodeAttestationObject(Buffer.from(base64URLStringToBuffer(cred.response.attestationObject)))
       const decodedAttestationObjectResult = {
         attStmt:decodedAttestationObject.get('attStmt'),
         fmt:decodedAttestationObject.get('fmt'),
         authData:bufferToBase64URLString(decodedAttestationObject.get('authData').buffer)
       }
-      
+
       const decodedAuthData = parseAuthenticatorData(decodedAttestationObject.get('authData'))
       
       const decodedAuthDataResult = {
@@ -72,11 +72,9 @@ export function usePasskeyCreate() {
         keyResult,
         clientDataJSON: decodeClientData,
       });
-      // try { useHistoryStore.getState().push(cred); } catch {}
     } catch (e: any) {
       const errRes: RunResult<PublicKeyCredentialCreationOptionsJSON, any> = { ok: false, request: req, error: { name: e?.name || "Error", message: e?.message || "Unknown" }, at: new Date().toISOString(), method: "create" };
       setError({ name: errRes.error!.name, message: errRes.error!.message });
-      try { useHistoryStore.getState().push(errRes); } catch {}
     } finally {
       setRunning(false);
     }
